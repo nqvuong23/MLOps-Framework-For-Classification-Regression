@@ -1,0 +1,23 @@
+problem_id: aq_pm25_reg
+task_type: regression
+description: Dự báo nồng độ PM2.5 trung bình 24 giờ tới (µg/m³) tại trạm — nguồn OpenAQ
+
+source:
+  type: openaq
+  entities: ../_entities/openaq_stations.yaml     # sinh bằng: python -m framework.collection discover-openaq
+  variables: [pm25, pm10, no2, o3, so2, co, temperature, relativehumidity]
+
+collection:
+  schedule: "5 * * * *"     # mỗi giờ, phút thứ 5
+  start_date: 2026-10-01
+  interval: 1h              # mỗi run phụ trách 1 điểm neo
+  frequency: 1h
+  horizon: 24h
+  maturity_lag: 24h         # chờ số đo về muộn từ nhà cung cấp
+
+label:
+  target: pm25
+  agg: mean                 # trung bình trên (t, t + 24h]
+  min_coverage: 0.75        # cần >= 18/24 giờ có số đo (quy ước trung bình 24h của US EPA)
+  valid_min: 0              # số đo âm / mã lỗi (-999) không được tính vào nhãn
+  valid_max: 2000

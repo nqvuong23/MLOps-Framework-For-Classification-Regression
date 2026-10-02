@@ -1,0 +1,25 @@
+problem_id: aq_pm25_clf
+task_type: binary
+description: Dự đoán 24 giờ tới PM2.5 trung bình có vượt ngưỡng không lành mạnh — nguồn OpenAQ
+
+source:
+  type: openaq
+  entities: ../_entities/openaq_stations.yaml     # sinh bằng: python -m framework.collection discover-openaq
+  variables: [pm25, pm10, no2, o3, so2, co, temperature, relativehumidity]
+
+collection:
+  schedule: "35 * * * *"    # mỗi giờ, lệch 30 phút so với aq_pm25_reg (OpenAQ giới hạn 60 request/phút)
+  start_date: 2026-10-01
+  interval: 1h
+  frequency: 1h
+  horizon: 24h
+  maturity_lag: 24h
+
+label:
+  target: pm25
+  agg: mean
+  min_coverage: 0.75
+  valid_min: 0
+  valid_max: 2000
+  threshold: 35.4           # µg/m³ — mốc "Unhealthy for Sensitive Groups" của US EPA AQI (WHO 2021: 15)
+  operator: ">"

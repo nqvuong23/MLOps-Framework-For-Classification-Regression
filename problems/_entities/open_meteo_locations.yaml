@@ -1,0 +1,15 @@
+# Địa điểm thu thập thời tiết (Open-Meteo là dữ liệu lưới toàn cầu → điểm nào cũng dày như nhau).
+# Chọn đa dạng khí hậu để nhãn mưa / nhiệt độ có đủ biến thiên. Thêm dòng = thêm địa điểm.
+entities:
+  - {id: hanoi,       name: Hà Nội,         latitude: 21.0285,  longitude: 105.8542,  country: VN}
+  - {id: ho_chi_minh, name: TP. Hồ Chí Minh, latitude: 10.8231,  longitude: 106.6297,  country: VN}
+  - {id: bangkok,     name: Bangkok,        latitude: 13.7563,  longitude: 100.5018,  country: TH}
+  - {id: singapore,   name: Singapore,      latitude: 1.3521,   longitude: 103.8198,  country: SG}
+  - {id: jakarta,     name: Jakarta,        latitude: -6.2088,  longitude: 106.8456,  country: ID}
+  - {id: mumbai,      name: Mumbai,         latitude: 19.0760,  longitude: 72.8777,   country: IN}
+  - {id: tokyo,       name: Tokyo,          latitude: 35.6762,  longitude: 139.6503,  country: JP}
+  - {id: sydney,      name: Sydney,         latitude: -33.8688, longitude: 151.2093,  country: AU}
+  - {id: london,      name: London,         latitude: 51.5074,  longitude: -0.1278,   country: GB}
+  - {id: new_york,    name: New York,       latitude: 40.7128,  longitude: -74.0060,  country: US}
+  - {id: sao_paulo,   name: São Paulo,      latitude: -23.5505, longitude: -46.6333,  country: BR}
+  - {id: nairobi,     name: Nairobi,        latitude: -1.2921,  longitude: 36.8219,   country: KE}

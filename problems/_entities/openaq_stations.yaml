@@ -1,0 +1,16 @@
+# Danh sách trạm OpenAQ — CHƯA CHỌN. Sinh file này bằng (cần OPENAQ_API_KEY):
+#
+#   python -m framework.collection discover-openaq --iso IN TH US --max-stations 10 --per-country 4
+#
+# Mỗi trạm có dạng:
+#   - id: "8118"                 # locations_id của OpenAQ
+#     name: ...
+#     latitude: ...
+#     longitude: ...
+#     country: IN
+#     timezone: Asia/Kolkata
+#     provider: ...
+#     sensors:
+#       - {id: 23534, parameter: pm25, units: µg/m³}
+#       - {id: 23535, parameter: pm10, units: µg/m³}
+entities: []
