@@ -1,16 +1,8 @@
+# Thư viện mà framework/collection import trực tiếp (Airflow và các provider đã có sẵn trong image)
 pandas
 numpy
-pyarrow
-pyspark
-s3fs
-boto3
-psycopg2-binary
-requests
-great-expectations==1.18.1
-slack-sdk
-evidently==0.4.36
-xgboost
-optuna
-mlflow
-scikit-learn
-openpyxl
+pyarrow     # engine Parquet của pandas (to_parquet / read_parquet)
+fsspec      # lớp storage chung cho local và S3
+s3fs        # backend s3:// của fsspec
+PyYAML      # đọc problems/<problem_id>/collection.yaml
+requests    # gọi API Open-Meteo / OpenAQ

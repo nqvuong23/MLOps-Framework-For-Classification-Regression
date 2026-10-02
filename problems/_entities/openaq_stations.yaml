@@ -1,16 +1,275 @@
-# Danh sách trạm OpenAQ — CHƯA CHỌN. Sinh file này bằng (cần OPENAQ_API_KEY):
-#
-#   python -m framework.collection discover-openaq --iso IN TH US --max-stations 10 --per-country 4
-#
-# Mỗi trạm có dạng:
-#   - id: "8118"                 # locations_id của OpenAQ
-#     name: ...
-#     latitude: ...
-#     longitude: ...
-#     country: IN
-#     timezone: Asia/Kolkata
-#     provider: ...
-#     sensors:
-#       - {id: 23534, parameter: pm25, units: µg/m³}
-#       - {id: 23535, parameter: pm10, units: µg/m³}
-entities: []
+# Sinh bởi `python -m framework.collection discover-openaq` lúc 2026-10-02 14:03 UTC — iso=['VN', 'KR', 'TW', 'PE', 'ZA', 'US']
+entities:
+- id: '288'
+  name: Hawthorne
+  latitude: 40.733501
+  longitude: -111.871696
+  country: US
+  locality: Salt Lake City
+  timezone: America/Denver
+  provider: AirNow
+  sensors:
+  - id: 478
+    parameter: co
+    units: ppm
+  - id: 3729
+    parameter: no2
+    units: ppm
+  - id: 3726
+    parameter: o3
+    units: ppm
+  - id: 559
+    parameter: pm10
+    units: µg/m³
+  - id: 3724
+    parameter: pm25
+    units: µg/m³
+  - id: 3725
+    parameter: so2
+    units: ppm
+- id: '807'
+  name: Parklane
+  latitude: 34.093899
+  longitude: -80.962196
+  country: US
+  locality: Columbia
+  timezone: America/New_York
+  provider: AirNow
+  sensors:
+  - id: 1411
+    parameter: co
+    units: ppm
+  - id: 1831
+    parameter: o3
+    units: ppm
+  - id: 15733921
+    parameter: pm10
+    units: µg/m³
+  - id: 21674
+    parameter: pm25
+    units: µg/m³
+  - id: 1832
+    parameter: so2
+    units: ppm
+- id: '2302'
+  name: VILLA MARIA DEL TRIUNFO
+  latitude: -12.166389
+  longitude: -76.92
+  country: PE
+  locality: Lima
+  timezone: America/Lima
+  provider: Senamhi
+  sensors:
+  - id: 4611
+    parameter: pm10
+    units: µg/m³
+  - id: 4165
+    parameter: pm25
+    units: µg/m³
+- id: '2351'
+  name: SAN MARTIN DE PORRES
+  latitude: -12.008889
+  longitude: -77.084472
+  country: PE
+  locality: Lima
+  timezone: America/Lima
+  provider: Senamhi
+  sensors:
+  - id: 4322
+    parameter: pm10
+    units: µg/m³
+  - id: 4319
+    parameter: pm25
+    units: µg/m³
+- id: '3844'
+  name: 屏東縣 - 恆春
+  latitude: 21.958069
+  longitude: 120.788928
+  country: TW
+  locality: 屏東縣
+  timezone: Asia/Taipei
+  provider: Taiwan
+  sensors:
+  - id: 8697
+    parameter: co
+    units: ppm
+  - id: 8693
+    parameter: no2
+    units: ppm
+  - id: 8696
+    parameter: o3
+    units: ppm
+  - id: 8695
+    parameter: pm10
+    units: µg/m³
+  - id: 8698
+    parameter: pm25
+    units: µg/m³
+  - id: 8694
+    parameter: so2
+    units: ppm
+- id: '3847'
+  name: 臺東縣 - 臺東
+  latitude: 22.755358
+  longitude: 121.15045
+  country: TW
+  locality: 臺東縣
+  timezone: Asia/Taipei
+  provider: Taiwan
+  sensors:
+  - id: 8766
+    parameter: co
+    units: ppm
+  - id: 8704
+    parameter: no2
+    units: ppm
+  - id: 8767
+    parameter: o3
+    units: ppm
+  - id: 8713
+    parameter: pm10
+    units: µg/m³
+  - id: 8709
+    parameter: pm25
+    units: µg/m³
+  - id: 8768
+    parameter: so2
+    units: ppm
+- id: '225457'
+  name: Phalaborwa-NAQI
+  latitude: -23.931992
+  longitude: 31.139652
+  country: ZA
+  locality: Limpopo
+  timezone: Africa/Johannesburg
+  provider: South Africa
+  sensors:
+  - id: 1993043
+    parameter: co
+    units: ppm
+  - id: 1303409
+    parameter: no2
+    units: ppm
+  - id: 1303463
+    parameter: o3
+    units: ppm
+  - id: 1303381
+    parameter: pm10
+    units: µg/m³
+  - id: 1303635
+    parameter: pm25
+    units: µg/m³
+  - id: 1303405
+    parameter: so2
+    units: ppm
+- id: '225394'
+  name: Middelburg SAWS-NAQI
+  latitude: -25.796056
+  longitude: 29.462823
+  country: ZA
+  locality: Mpumalanga
+  timezone: Africa/Johannesburg
+  provider: South Africa
+  sensors:
+  - id: 1303487
+    parameter: co
+    units: ppm
+  - id: 1303416
+    parameter: no2
+    units: ppm
+  - id: 1303646
+    parameter: o3
+    units: ppm
+  - id: 1303439
+    parameter: pm10
+    units: µg/m³
+  - id: 1303449
+    parameter: pm25
+    units: µg/m³
+  - id: 1303421
+    parameter: so2
+    units: ppm
+- id: '2622556'
+  name: 경인항
+  latitude: 37.566459
+  longitude: 126.595122
+  country: KR
+  locality: ' '
+  timezone: Asia/Seoul
+  provider: Korea Air Ministry of Environment
+  sensors:
+  - id: 8536084
+    parameter: co
+    units: ppm
+  - id: 8534278
+    parameter: no2
+    units: ppm
+  - id: 8536136
+    parameter: o3
+    units: ppm
+  - id: 8536024
+    parameter: pm10
+    units: µg/m³
+  - id: 8541407
+    parameter: pm25
+    units: µg/m³
+  - id: 8534500
+    parameter: so2
+    units: ppm
+- id: '2622558'
+  name: 관인면
+  latitude: 38.123833
+  longitude: 127.25235
+  country: KR
+  locality: ' '
+  timezone: Asia/Seoul
+  provider: Korea Air Ministry of Environment
+  sensors:
+  - id: 8538740
+    parameter: co
+    units: ppm
+  - id: 8538644
+    parameter: no2
+    units: ppm
+  - id: 8539350
+    parameter: o3
+    units: ppm
+  - id: 8540465
+    parameter: pm10
+    units: µg/m³
+  - id: 8535703
+    parameter: pm25
+    units: µg/m³
+  - id: 8539049
+    parameter: so2
+    units: ppm
+- id: '4946812'
+  name: Công viên Nhân Chính - Khuất Duy Tiến
+  latitude: 21.0031
+  longitude: 105.7947
+  country: VN
+  locality: Hanoi
+  timezone: Asia/Bangkok
+  provider: Hanoi Air Quality Monitoring Network
+  sensors:
+  - id: 13502153
+    parameter: pm10
+    units: µg/m³
+  - id: 13502151
+    parameter: pm25
+    units: µg/m³
+- id: '4946813'
+  name: 'Số 1 đường Giải Phóng - phường Bạch Mai - ĐHBK '
+  latitude: 21.0052
+  longitude: 105.8418
+  country: VN
+  locality: Hanoi
+  timezone: Asia/Bangkok
+  provider: Hanoi Air Quality Monitoring Network
+  sensors:
+  - id: 13502152
+    parameter: pm10
+    units: µg/m³
+  - id: 13502154
+    parameter: pm25
+    units: µg/m³

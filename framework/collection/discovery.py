@@ -11,6 +11,7 @@ from collections import Counter
 from datetime import datetime, timedelta, timezone
 
 from .connectors.openaq import API_URL, make_client
+from .http_client import HttpError
 from .window import parse_time
 
 logger = logging.getLogger(__name__)
@@ -76,7 +77,11 @@ def discover_stations(iso_codes, parameters, required: str = "pm25", max_station
             continue
 
         # Chi tiết từng sensor: chọn 1 sensor còn hoạt động cho mỗi thông số
-        details = client.get_json(f"{url}/locations/{location['id']}/sensors").get("results") or []
+        try:
+            details = client.get_json(f"{url}/locations/{location['id']}/sensors").get("results") or []
+        except HttpError as exc:       # OpenAQ trả lỗi cố định cho một số trạm — bỏ qua, xét ứng viên kế tiếp
+            logger.warning("Trạm %s: không lấy được danh sách sensor (HTTP %s) — bỏ qua", location["id"], exc.status)
+            continue
         chosen = {}
         for sensor in details:
             name = (sensor.get("parameter") or {}).get("name")

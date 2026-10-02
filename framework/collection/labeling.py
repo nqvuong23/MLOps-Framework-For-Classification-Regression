@@ -21,6 +21,10 @@ LABEL_COLUMNS = ["label", "label_raw", "label_coverage", "label_window_end"]
 
 _COMPARATORS = {">": operator.gt, ">=": operator.ge, "<": operator.lt, "<=": operator.le}
 
+# Tổng hợp trượt cộng/trừ dồn nên lệch cỡ 1e-16 (0.5 + 0.5 ra 0.9999999999999999); làm tròn để
+# giá trị nằm đúng trên ngưỡng không bị lật nhãn
+LABEL_DECIMALS = 9
+
 
 def _future_aggregate(series: pd.Series, steps: int, agg: str):
     """Tổng hợp `series` trên (t, t + steps] cho từng mốc t → (giá trị, tỉ lệ số đo có mặt)."""
@@ -28,7 +32,7 @@ def _future_aggregate(series: pd.Series, steps: int, agg: str):
         value = series.shift(-steps)
         return value, value.notna().astype("float64")
     rolling = series.rolling(window=steps, min_periods=1)
-    value = getattr(rolling, agg)().shift(-steps)
+    value = getattr(rolling, agg)().shift(-steps).round(LABEL_DECIMALS)
     coverage = (rolling.count() / steps).shift(-steps)
     return value, coverage
 

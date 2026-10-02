@@ -1,6 +1,6 @@
 """
-data_collection_dag.py
-======================
+data_collection.py
+==================
 DAG factory cho tính năng Data Collection: mỗi `problems/<problem_id>/collection.yaml`
 sinh ra một DAG `<problem_id>_collect`. Thêm bài toán mới = thêm 1 thư mục config, không sửa file này.
 
@@ -10,7 +10,7 @@ Flow của mỗi DAG:
   2. extract        → Gọi API nguồn, lưu NGUYÊN JSON (gzip) vào landing/
   3. flatten        → JSON → bảng quan sát (entity_id, event_time, mỗi biến một cột) → observations/
   4. build_labels   → Tính nhãn trên cửa sổ (t, t + H] → bảng training → labeled/
-  5. report         → Ghi manifest, cảnh báo nếu không có dòng nào được gán nhãn
+  5. report         → Ghi manifest, log cảnh báo nếu không có dòng nào được gán nhãn
 
 Không có cleaning / feature engineering ở đây — đó là các khối phía sau.
 
@@ -29,9 +29,7 @@ from datetime import datetime, timedelta, timezone
 from airflow import DAG
 from airflow.providers.standard.operators.python import PythonOperator
 
-sys.path.insert(0, "/opt/airflow/plugins")
 sys.path.insert(0, os.environ.get("FRAMEWORK_ROOT", "/opt/airflow"))
-from alert_utils import send_alert, airflow_failure_callback
 from framework.collection import pipeline
 from framework.collection.config import discover_problem_ids, load_config
 from framework.collection.window import Window, explicit_window, parse_time, scheduled_window
@@ -93,20 +91,23 @@ def build_labels(problem_id: str, **context):
 
 
 def report(problem_id: str, **context):
-    """Task 5: Ghi manifest; gửi cảnh báo khi lần chạy không sinh được dữ liệu training."""
+    """Task 5: Ghi manifest; log cảnh báo khi lần chạy không sinh được dữ liệu training."""
     cfg, window, storage = _load(problem_id, context)
     ti = context["ti"]
     stages = {task_id: ti.xcom_pull(task_ids=task_id) for task_id in ("extract", "flatten", "build_labels")}
     summary = pipeline.report(cfg, window, storage, stages)
 
     if summary["warnings"]:
-        send_alert(
-            subject=f"Data collection warning: {problem_id}",
-            message="; ".join(summary["warnings"]),
-            level="warning",
-            context={"problem_id": problem_id, "window": window.key, **(stages["build_labels"] or {})},
-        )
+        logger.warning(f"[{problem_id}] cửa sổ {window.key}: {'; '.join(summary['warnings'])} | "
+                       f"{stages['build_labels'] or {}}")
     return {"window": window.key, **(stages["build_labels"] or {})}
+
+
+def log_failure(context):
+    """on_failure_callback: ghi lỗi của task ra log (chưa gửi alert ra ngoài)."""
+    ti = context.get("ti") or context.get("task_instance")
+    logger.error(f"[{getattr(ti, 'dag_id', '?')}] task '{getattr(ti, 'task_id', '?')}' thất bại "
+                 f"(lần thử {getattr(ti, 'try_number', '?')}): {context.get('exception')!r}")
 
 
 # ── DAG Factory ───────────────────────────────────────────────────────────────
@@ -117,7 +118,7 @@ def build_collection_dag(cfg) -> DAG:
         "depends_on_past": False,
         "retries": 2,
         "retry_delay": timedelta(minutes=10),
-        "on_failure_callback": airflow_failure_callback,
+        "on_failure_callback": log_failure,
     }
     dag = DAG(
         dag_id=f"{cfg.problem_id}_collect",

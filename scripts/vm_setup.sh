@@ -23,11 +23,11 @@ else
 fi
  
 # shellcheck source=/dev/null
-source "${VENV_DIR}/bin/activate"
-echo "[✓] Virtual environment activated: ${VIRTUAL_ENV}"
+# source "${VENV_DIR}/bin/activate"
+# echo "[✓] Virtual environment activated: ${VIRTUAL_ENV}"
 
 # Install Python dependencies
-pip install -r "${PROJECT_ROOT}/requirements.txt"
+# pip install -r "${PROJECT_ROOT}/requirements.txt"
 
 # Install Docker
 if ! command -v docker &>/dev/null; then

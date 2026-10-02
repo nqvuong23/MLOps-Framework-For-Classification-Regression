@@ -94,6 +94,15 @@ def test_sum_threshold_binary_label(config_factory):
     assert str(labeled["label"].dtype) == "int8"
 
 
+def test_threshold_label_ignores_floating_point_noise_of_rolling_sum(config_factory):
+    cfg = config_factory(task_type="binary", agg="sum", threshold=1.0, operator=">=", horizon_hours=3)
+    window = explicit_window(cfg, START, START + timedelta(hours=1))
+    # t=00: 0.5 + 0.5 + 0.0 = 1.0, đúng bằng ngưỡng; tổng trượt của pandas lại ra 0.9999999999999999
+    labeled, _ = build_labels(obs_frame({"a": [0.6, 0.5, 0.5, 0.0]}, START), window, cfg)
+    assert labeled["label_raw"].tolist() == [1.0]
+    assert labeled["label"].tolist() == [1]
+
+
 def test_last_label_is_point_value_at_horizon(config_factory):
     cfg = config_factory(agg="last", horizon_hours=3)
     window = explicit_window(cfg, START, START + timedelta(hours=2))

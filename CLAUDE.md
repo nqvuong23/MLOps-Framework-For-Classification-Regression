@@ -140,16 +140,22 @@ Khối này **không** làm cleaning hay feature engineering — đó là các f
 - CLI: `python -m framework.collection {list | window | run | discover-openaq}`; `run --start --end` để backfill,
   `--base-uri <thư mục>` để ghi ra local thay vì S3.
 - Test: `pytest tests/collection` — không cần mạng, không cần S3.
-- Phụ thuộc: DAG import `send_alert` và `airflow_failure_callback` từ `airflow/plugins/alert_utils.py`;
-  `docker-compose.yaml` phải mount `./framework` và `./problems` vào `/opt/airflow/`.
+- Phụ thuộc: `docker-compose.yaml` phải mount `./framework` và `./problems` vào `/opt/airflow/`.
+  DAG chưa gửi alert ra ngoài: cảnh báo của `report` và lỗi task (`on_failure_callback=log_failure`) chỉ ghi ra log.
+- Hướng dẫn chạy demo: `docs/data_collection_demo.md`; bảng kết quả mẫu của 4 bài toán: `docs/data_collection_samples.md`.
 
 ### 4.5 Trạng thái kiểm chứng (2026-10-02)
 
-- Đã chạy thật end-to-end với **Open-Meteo** (run theo lịch và backfill 40 ngày), ghi ra thư mục local; nhãn khớp khi tính tay.
-- **Chưa kiểm chứng**: gọi OpenAQ thật (connector mới test bằng payload dựng theo OpenAPI spec), ghi lên S3 thật,
-  và parse/chạy DAG trong Airflow thật.
-- `openaq_stations.yaml` **đang rỗng** --> hai DAG `aq_*` sẽ lỗi cho tới khi chạy `discover-openaq` (cần API key).
-- Ngưỡng 35,4 µg/m³ phụ thuộc trạm được chọn; xem tỉ lệ lớp dương sau backfill, nếu quá thấp thì đổi sang 15 (mốc WHO).
+- Đã chạy thật end-to-end bằng CLI cả **Open-Meteo** và **OpenAQ** (run theo lịch + backfill), ghi ra thư mục local;
+  nhãn của cả 4 bài toán khớp 100% khi tính lại độc lập từ JSON trong `landing/`.
+- **Chưa kiểm chứng**: ghi lên S3 thật, build image và parse/chạy DAG trong Airflow thật (file DAG mới chạy với stub của Airflow).
+- `openaq_stations.yaml` có 12 trạm (VN, KR, TW, PE, ZA, US; 2 trạm mỗi nước). Lưu ý khi chọn lại trạm:
+  - Ấn Độ (CPCB) đang về trễ 2–7 ngày nên `--max-age-hours 48` không ra trạm nào; muốn dùng thì phải tăng cả `maturity_lag`.
+  - Một số trạm bị OpenAQ trả HTTP 500 cố định ở `/locations/{id}/sensors`; `discover-openaq` bỏ qua nhưng tốn ~1 phút retry mỗi trạm.
+  - Nhiều trạm khai báo 6 thông số nhưng chỉ còn 2 sensor hoạt động; số thông số thật chỉ biết sau khi gọi chi tiết sensor.
+- Không trạm nào đang chọn có sensor `temperature` / `relativehumidity` --> hai cột này toàn null.
+  `<param>_coverage` có thể vượt 100 (trạm đo 5 phút/lần cho giá trị 1200).
+- Ngưỡng 35,4 µg/m³: backfill 2026-09-23 → 09-30 cho lớp dương 3,9% (toàn bộ từ 2 trạm Hà Nội); với ngưỡng 15 (mốc WHO) là 32,7%.
 
 ---
 

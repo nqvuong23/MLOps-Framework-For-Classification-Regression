@@ -2,6 +2,7 @@
 from datetime import datetime, timedelta, timezone
 
 from framework.collection.discovery import discover_stations
+from framework.collection.http_client import HttpError
 
 NOW = datetime.now(timezone.utc)
 FRESH = {"utc": (NOW - timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M:%SZ")}
@@ -69,3 +70,18 @@ def test_discover_stations_respects_max_stations():
     stations = discover_stations(["IN"], ["pm25", "pm10", "no2", "o3"], max_stations=2, client=client)
     assert len(stations) == 2
     assert sum("/sensors" in url for url in client.calls) == 2          # không gọi chi tiết thừa
+
+
+def test_discover_stations_skips_station_whose_sensor_endpoint_fails():
+    sensors = lambda base: [sensor(base + i, name) for i, name in enumerate(["pm25", "pm10", "no2", "o3"])]  # noqa: E731
+
+    class BrokenStationClient(StubClient):
+        def get_json(self, url, params=None):
+            if url.endswith("/locations/1/sensors"):                    # OpenAQ trả 500 cố định cho trạm này
+                self.calls.append(url)
+                raise HttpError(500, url, "Internal Server Error")
+            return super().get_json(url, params)
+
+    client = BrokenStationClient([location(i, sensors(i * 10)) for i in range(1, 4)])
+    stations = discover_stations(["IN"], ["pm25", "pm10", "no2", "o3"], max_stations=2, client=client)
+    assert [s["id"] for s in stations] == ["2", "3"]                   # trạm 1 bị bỏ, vẫn chọn đủ 2 trạm
