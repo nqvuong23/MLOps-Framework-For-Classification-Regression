@@ -188,7 +188,8 @@ Khối này **không** làm cleaning hay feature engineering — đó là các f
 - [airflow/plugins/](airflow/plugins/) — `alert_utils.py` (Slack/email + `airflow_failure_callback`).
 - [tests/](tests/) — `collection/`.
 - [docs/](docs/) — `plan.md` (khảo sát hai nguồn + thiết kế Data Collection),
-  `improvement.md` (thiết kế framework: contract, operator tổng quát, label store, DAG factory).
+  `improvement.md` (thiết kế framework: contract, operator tổng quát, label store, DAG factory),
+  `references_data_processing.md` (20 bài báo open-access làm căn cứ cho module Data Processing).
 - [docker-compose.yaml](docker-compose.yaml), `airflow.Dockerfile`, `airflow.requirements.txt` — Airflow stack.
 - [.env.example](.env.example) — danh sách biến môi trường (chỉ placeholder, không chứa giá trị thật).
 

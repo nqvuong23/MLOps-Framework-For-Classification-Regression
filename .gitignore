@@ -49,3 +49,5 @@ testing/
 # Data collection: output khi chạy CLI với --base-uri local
 _collection_out/
 .pytest_cache/
+
+paper
