@@ -51,3 +51,6 @@ _collection_out/
 .pytest_cache/
 
 paper
+
+# Dữ liệu sinh ra khi chạy các bước tiền xử lý trong test/
+test/data/

@@ -1,0 +1,5 @@
+pandas
+numpy
+pyarrow     # engine Parquet của pandas
+requests    # gọi Open-Meteo API (chỉ collection.py)
+pytest      # chạy test_steps.py
